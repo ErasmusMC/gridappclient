@@ -5,6 +5,16 @@ Grid Application Client to run applications easily on the BiG Grid infrastructur
 
 Currently the only application integrated is TopHat (version 2.0.8b). To add an application a wrapper script, a form and some control code must be implemented. See the src/client/apps/tophat package as an example.
 
+Setup in Netbeans
+------------------
+1. Navigate to Team > Git > Clone...
+2. Fill in the forms, repository URL is https://github.com/bstoker/gridappclient.git/
+3. Leave 'Scan for NetBeans Projects after Clone' checked or navigate to File > New Project...
+4. Choose 'Java Project with Existing Sources' under the category 'Java'
+5. Set the Project Folder to the directory you cloned the git repository to
+6. Add 'client' and 'images' as Source Package Folders, click next and finish
+7. Add the required libraries to your project, build and run it
+
 Required Libraries
 ------------------
 * [sshj-0.8.1](https://github.com/downloads/shikhar/sshj/sshj-0.8.1.zip)
