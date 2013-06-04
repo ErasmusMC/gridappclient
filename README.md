@@ -1,9 +1,20 @@
-gridappclient
+Grid Application Client
 =============
 
-Grid Application Client to run applications easily on the BiG Grid infrastructure. Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. 
+Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
+* TopHat 2
 
-Currently the only application integrated is TopHat (version 2.0.8b). To add an application a wrapper script, a form and some control code must be implemented. See the src/client/apps/tophat package as an example.
+See [this page](https://github.com/bstoker/gridappclient/wiki/Adding-a-New-Application) on how to add an application.
+
+Setup in Netbeans
+------------------
+1. Navigate to Team > Git > Clone...
+2. Fill in the forms, repository URL is https://github.com/bstoker/gridappclient.git/
+3. Leave 'Scan for NetBeans Projects after Clone' checked or navigate to File > New Project...
+4. Choose 'Java Project with Existing Sources' under the category 'Java'
+5. Set the Project Folder to the directory you cloned the git repository to
+6. Add 'client' and 'images' as Source Package Folders, click next and finish
+7. Add the required libraries to your project, build and run it
 
 Required Libraries
 ------------------
@@ -15,10 +26,11 @@ Required Libraries
 * [bcprov](http://www.bouncycastle.org/latest_releases.html) (required by swiss-proxy-knife)
 * [vlet-1.5.0](http://sourceforge.net/projects/vlet/files/vlet-1.5.0/vlet-1.5.0.zip/download)
 
-Requirements to Run the Application
+Other Requirements
 -------------------
-* Login credentials to a Grid User Interface (UI) machine.
+* Login credentials to a Grid UI machine.
 * A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
+See [this page](https://github.com/bstoker/gridappclient/wiki/Accessing-the-Life-Science-Grid) on how to access the Life Science Grid.
 
 Notes
 ------------------
