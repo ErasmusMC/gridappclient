@@ -17,8 +17,8 @@ Required Libraries
 
 Requirements to Run the Application
 -------------------
-* Login credentials to a Grid User Interface (UI) machine
-* A valid grid certificate installed on your pc and the Grid UI machine
+* Login credentials to a Grid User Interface (UI) machine.
+* A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
 
 Notes
 ------------------
