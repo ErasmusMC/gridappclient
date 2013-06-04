@@ -1,7 +1,7 @@
-gridappclient
+Grid Application Client
 =============
 
-Grid Application Client to run applications easily on the BiG Grid infrastructure, the dutch node in the European Grid Infrastructure. Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. 
+Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. 
 
 Currently the only application integrated is TopHat (version 2.0.8b). To add an application a wrapper script, a form and some control code must be implemented. See the src/client/apps/tophat package as an example.
 
@@ -25,7 +25,7 @@ Required Libraries
 * [bcprov](http://www.bouncycastle.org/latest_releases.html) (required by swiss-proxy-knife)
 * [vlet-1.5.0](http://sourceforge.net/projects/vlet/files/vlet-1.5.0/vlet-1.5.0.zip/download)
 
-Requirements to Run the Application
+Other Requirements
 -------------------
 * Login credentials to a Grid User Interface (UI) machine.
 * A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
