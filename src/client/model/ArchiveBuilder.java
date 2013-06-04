@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.GZIPOutputStream;
-import org.xeustechnologies.jtar.TarEntry;
-import org.xeustechnologies.jtar.TarOutputStream;
+import org.kamranzafar.jtar.TarEntry;
+import org.kamranzafar.jtar.TarOutputStream;
 
 /**
  *

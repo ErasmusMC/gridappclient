@@ -66,8 +66,8 @@ public class RefreshTabButton extends JPanel {
                 parent.setSelectedIndex(index);
                 if (!controller.getJobs().isEmpty()) {
 
-                    if (controller.getLocalProxyLifetime() < REQUIRED_PROXY_TIME) {
-                        PasswordDialog dialog = new PasswordDialog(RefreshTabButton.this, "Local Proxy Required!");
+                    if (controller.getRemoteProxyLifetime() < REQUIRED_PROXY_TIME) {
+                        PasswordDialog dialog = new PasswordDialog(RefreshTabButton.this, "Grid Proxy Required!");
                         dialog.setVisible(true);
 
                         if (dialog.getValue() != JOptionPane.OK_OPTION) {
@@ -77,8 +77,8 @@ public class RefreshTabButton extends JPanel {
 
                         boolean succes;
                         try {
-                            succes = controller.createLocalProxy(dialog.getPassword(), DEFAULT_PROXY_TIME);
-                        } catch (IOException | InterruptedException ex) {
+                            succes = controller.createRemoteProxy(dialog.getPassword(), DEFAULT_PROXY_TIME);
+                        } catch (IOException ex) {
                             JOptionPane.showMessageDialog(RefreshTabButton.this, ex.getMessage(), "I/O Error occured", JOptionPane.WARNING_MESSAGE);
                             Logger.getLogger(NewFilePanel.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
                             return;
