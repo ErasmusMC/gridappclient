@@ -20,7 +20,7 @@ import java.util.TreeMap;
  */
 public enum Application implements FileListener<BinaryFile> {
 
-    Tophat(new File(TophatOptionForm.class.getResource("tophatwrapper").getPath()), 168, WallClock.Short.getTime(), 8) {
+    Tophat(new File(TophatOptionForm.class.getResource("tophatwrapper").getPath()), 168, WallClock.LONG.getTime(), 8) {
         @Override
         public Container createForm(BinaryFile version, NavigationController navigator, Controller controller) {
             TophatOptionForm form = new TophatOptionForm(this, version, navigator, controller);

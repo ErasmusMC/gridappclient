@@ -10,10 +10,10 @@ package client.model;
  */
 public enum WallClock {
 
-    Express(30),
-    Short(240),
-    Medium(2160),
-    Long(4320);
+    EXPRESS(30),
+    SHORT(240),
+    MEDIUM(2160),
+    LONG(4320);
     private int minutes;
 
     private WallClock(int minutes) {

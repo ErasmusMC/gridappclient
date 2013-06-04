@@ -1,7 +1,7 @@
 gridappclient
 =============
 
-Grid Application Client to run applications easily on the BiG Grid infrastructure, the dutch node in the European Grid Infrastructure. Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. 
+Grid Application Client to run applications easily on the BiG Grid infrastructure. Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. 
 
 Currently the only application integrated is TopHat (version 2.0.8b). To add an application a wrapper script, a form and some control code must be implemented. See the src/client/apps/tophat package as an example.
 
