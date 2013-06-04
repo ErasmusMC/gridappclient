@@ -15,6 +15,12 @@ Required Libraries
 * [bcprov](http://www.bouncycastle.org/latest_releases.html) (required by swiss-proxy-knife)
 * [vlet-1.5.0](http://sourceforge.net/projects/vlet/files/vlet-1.5.0/vlet-1.5.0.zip/download)
 
+Requirements to Run the Application
+-------------------
+* Login credentials to a Grid User Interface (UI) machine
+* A valid grid certificate installed on your pc and the Grid UI machine
+
 Notes
 ------------------
-The view has been created with the SWING GUI Builder integrated in the Netbeans IDE.
+* The view has been created with the SWING GUI Builder integrated in the Netbeans IDE.
+* The UI machine has been locked to ui.grid.sara.nl, because some meta-data is stored and not available if you switch to another UI machine.
