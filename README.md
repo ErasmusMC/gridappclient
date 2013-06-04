@@ -1,7 +1,7 @@
 Grid Application Client
 =============
 
-Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use GUI only. Currently these applications are integrated:
+Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
 * TopHat 2
 
 See [this page](https://github.com/bstoker/gridappclient/wiki/Adding-a-New-Application) on how to add an application.
@@ -28,7 +28,7 @@ Required Libraries
 
 Other Requirements
 -------------------
-* Login credentials to a Grid User Interface (UI) machine.
+* Login credentials to a Grid UI machine.
 * A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
 See [this page](https://github.com/bstoker/gridappclient/wiki/Accessing-the-Life-Science-Grid) on how to access the Life Science Grid.
 
