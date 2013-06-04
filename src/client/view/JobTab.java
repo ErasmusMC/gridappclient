@@ -1,0 +1,349 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package client.view;
+
+import client.control.Controller;
+import client.control.NavigationController;
+import client.model.Application;
+import client.model.Job;
+import client.model.LogicalFile;
+import client.model.RowTableModel;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+
+/**
+ *
+ * @author bram
+ */
+public class JobTab extends javax.swing.JPanel {
+
+    private static final int MIN_PROXY_LIFETIME = 2;
+    private static final Logger LOGGER = Logger.getLogger(JobTab.class.getSimpleName());
+    private Controller controller;
+    private NavigationController navigator;
+
+    /**
+     * Creates new form StatusPanel
+     */
+    public JobTab(NavigationController navigator, final Controller controller) {
+        this.navigator = navigator;
+        this.controller = controller;
+
+        initComponents();
+
+        RowTableModel<Job> jobModel = new RowTableModel<>(Job.class, "getDateCreated", "getBatch", "getInput", "getApplication", "getStatus");
+        jobTable.setModel(jobModel);
+        jobTable.setAutoCreateRowSorter(true);
+        jobTable.getColumnModel().getColumn(4).setCellRenderer(new ProgressRenderer());
+        setPreferredColumnWidths(new double[]{0.3, 0.15, 0.15, 0.25, 0.15});
+        controller.setJobModel(jobModel);
+
+        jobTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (jobTable.getSelectedRows().length <= 0) {
+                    downloadResults.setEnabled(false);
+                    return;
+                }
+
+                for (int row : jobTable.getSelectedRows()) {
+                    if (!controller.getJob(row).isSubmitted()) {
+                        downloadResults.setEnabled(false);
+                        return;
+                    }
+                }
+                downloadResults.setEnabled(true);
+            }
+        });
+
+        jobTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                if (!e.isPopupTrigger()) {
+                    return;
+                }
+
+                int r = jobTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < jobTable.getRowCount()) {
+                    jobTable.setRowSelectionInterval(r, r);
+                } else {
+                    jobTable.clearSelection();
+                }
+
+                final int rowindex = jobTable.getSelectedRow();
+                if (rowindex < 0) {
+                    return;
+                }
+
+                if (e.getComponent() instanceof JTable) {
+                    JPopupMenu popup = new JPopupMenu();
+                    popup.add(new JMenuItem(new AbstractAction("View details") {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Job job = controller.getJob(rowindex);
+                            new JobDetailsDialog(JobTab.this, job).setVisible(true);
+                        }
+                    }));
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    mouseReleased(e);
+                }
+                super.mouseClicked(e);
+            }
+        });
+    }
+
+    private void setPreferredColumnWidths(double[] percentages) {
+        Dimension tableDim = jobTable.getPreferredSize();
+        double total = 0;
+        for (int i = 0; i < jobTable.getColumnModel().getColumnCount(); i++) {
+            total += percentages[i];
+        }
+
+        for (int i = 0; i < jobTable.getColumnModel().getColumnCount(); i++) {
+            TableColumn column = jobTable.getColumnModel().getColumn(i);
+            column.setPreferredWidth((int) (tableDim.width * (percentages[i] / total)));
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jobTable = new javax.swing.JTable();
+        newJobButton = new javax.swing.JButton();
+        downloadResults = new javax.swing.JButton();
+        deleteJob = new javax.swing.JButton();
+
+        setPreferredSize(new java.awt.Dimension(640, 450));
+
+        jobTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jobTable);
+
+        newJobButton.setText("Run New");
+        newJobButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newJobButtonActionPerformed(evt);
+            }
+        });
+
+        downloadResults.setText("Results");
+        downloadResults.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadResultsActionPerformed(evt);
+            }
+        });
+
+        deleteJob.setText("Delete");
+        deleteJob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJobActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(downloadResults, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deleteJob, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(downloadResults)
+                        .addComponent(deleteJob))
+                    .addComponent(newJobButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(4, 4, 4))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void newJobButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newJobButtonActionPerformed
+        NewJobDialog dialog = new NewJobDialog(this);
+        dialog.setVisible(true);
+        int value = dialog.getValue();
+        if (value == JOptionPane.OK_OPTION) {
+            Application application = dialog.getApplication();
+            navigator.navigate(this.getParent(), application.createForm(dialog.getVersion(), navigator, controller));
+        }
+        dialog.dispose();
+    }//GEN-LAST:event_newJobButtonActionPerformed
+
+    private void downloadResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadResultsActionPerformed
+
+        for (int row : jobTable.getSelectedRows()) {
+            Job job = controller.getJob(row);
+            if (!job.isFinished()) {
+                JOptionPane.showMessageDialog(this, "Unable to download results: One or more jobs have not been successfully completed!", "Unable to Download", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        boolean localProxied = controller.getLocalProxyLifetime() >= MIN_PROXY_LIFETIME;
+
+        if (!localProxied) {
+            PasswordDialog dialog = new PasswordDialog(this, "Proxy Required");
+            dialog.setVisible(true);
+
+            if (dialog.getValue() == JOptionPane.OK_OPTION) {
+                if (!localProxied) {
+                    try {
+                        localProxied = controller.createLocalProxy(dialog.getPassword(), MIN_PROXY_LIFETIME);
+                    } catch (IOException | InterruptedException ex) {
+                        LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                        JOptionPane.showMessageDialog(this, "Invalid Passphrase!", "Proxy Creation Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+            dialog.dispose();
+        }
+
+        if (!localProxied) {
+            return;
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setDialogTitle("Please select a directory");
+        fileChooser.setApproveButtonText("Download");
+        int value = fileChooser.showSaveDialog(this);
+
+        if (value == JOptionPane.OK_OPTION) {
+            final CountDownLatch latch = new CountDownLatch(jobTable.getSelectedRows().length);
+            final File destination = fileChooser.getSelectedFile();
+
+            for (int row : jobTable.getSelectedRows()) {
+                final LogicalFile source = controller.getJob(row).getOutput();
+                controller.executeInBackground(new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            controller.downloadFromSE(source, destination);
+                        } catch (IOException | InterruptedException ex) {
+                            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                        }
+                        latch.countDown();
+                    }
+                });
+            }
+            controller.showMessageOnLatchRelease(latch, "Task Completed", "Downloads are finished");
+        }
+    }//GEN-LAST:event_downloadResultsActionPerformed
+
+    private void deleteJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJobActionPerformed
+
+        boolean gridProxied = controller.getRemoteProxyLifetime() >= MIN_PROXY_LIFETIME;
+
+        if (!gridProxied) {
+            PasswordDialog dialog = new PasswordDialog(this, "Grid Proxy Required");
+            dialog.setVisible(true);
+
+            if (dialog.getValue() == JOptionPane.OK_OPTION) {
+                try {
+                    gridProxied = controller.createRemoteProxy(dialog.getPassword(), MIN_PROXY_LIFETIME);
+                } catch (IOException ex) {
+                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                    JOptionPane.showMessageDialog(this, "Invalid Passphrase!", "Proxy Creation Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            dialog.dispose();
+        }
+
+        if (!gridProxied) {
+            return;
+        }
+
+        controller.removeJobs(jobTable.getSelectedRows());
+    }//GEN-LAST:event_deleteJobActionPerformed
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton deleteJob;
+    private javax.swing.JButton downloadResults;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jobTable;
+    private javax.swing.JButton newJobButton;
+    // End of variables declaration//GEN-END:variables
+
+    class ProgressRenderer extends DefaultTableCellRenderer {
+
+        private final JProgressBar progressBar;
+
+        public ProgressRenderer() {
+            super();
+            setOpaque(true);
+            progressBar = new JProgressBar(0, 100);
+            progressBar.setString("");
+            progressBar.setStringPainted(true);
+            progressBar.setIndeterminate(false);
+            progressBar.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+            Job job = controller.getJob(row);
+            int progress = job.getProgress();
+            if (progress < 0 || progress > 100) {
+                return super.getTableCellRendererComponent(table, "Error", isSelected, hasFocus, row, column);
+            }
+            progressBar.setValue(progress);
+            progressBar.setString((String) value);
+            return progressBar;
+        }
+    }
+}
