@@ -22,7 +22,7 @@ Required Libraries
 * [jtar-2.2](http://search.maven.org/remotecontent?filepath=org/kamranzafar/jtar/2.2/jtar-2.2.jar)
 * [slf4j-1.7.2](http://www.slf4j.org/download.html) (api and jdk14 modules)
 * [commons-io-2.4](http://commons.apache.org/proper/commons-io/download_io.cgi)
-* [swiss-proxy-knife](https://github.com/grith/swiss-proxy-knife)
+* [swiss-proxy-knife](https://github.com/grith/swiss-proxy-knife/tree/develop)
 * [bcprov](http://www.bouncycastle.org/latest_releases.html) (required by swiss-proxy-knife)
 * [vlet-1.5.0](http://sourceforge.net/projects/vlet/files/vlet-1.5.0/vlet-1.5.0.zip/download)
 
