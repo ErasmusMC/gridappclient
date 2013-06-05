@@ -1316,7 +1316,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
                 batch.addPrerequisiteFiles(annotation);
                 batch.addOption("--GTF", annotation.getName());
             } else if (selectedAnnotation instanceof LogicalFile) {
-                batch.addOption("--GTF", ((LogicalFile) selectedAnnotation).getName());
+                batch.addOption("--GTF", ((LogicalFile) selectedAnnotation).getID());
             }
 
             Object selectedJunction = junctionComboBox.getSelectedItem();
@@ -1325,7 +1325,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
                 batch.addPrerequisiteFiles(junction);
                 batch.addOption("--raw-juncs", junction.getName());
             } else if (selectedJunction instanceof LogicalFile) {
-                batch.addOption("--raw-juncs", ((LogicalFile) selectedJunction).getName());
+                batch.addOption("--raw-juncs", ((LogicalFile) selectedJunction).getID());
             }
 
             if (noNovelJuncs.isSelected()) {
@@ -1352,7 +1352,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
                 batch.addPrerequisiteFiles(junction);
                 batch.addOption("--insertions", junction.getName());
             } else if (selectedInsertion instanceof LogicalFile) {
-                batch.addOption("--insertions", ((LogicalFile) selectedInsertion).getName());
+                batch.addOption("--insertions", ((LogicalFile) selectedInsertion).getID());
             }
 
             Object selectedDeletion = deletionComboBox.getSelectedItem();
@@ -1361,7 +1361,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
                 batch.addPrerequisiteFiles(junction);
                 batch.addOption("--deletions", junction.getName());
             } else if (selectedDeletion instanceof LogicalFile) {
-                batch.addOption("--deletions", ((LogicalFile) selectedDeletion).getName());
+                batch.addOption("--deletions", ((LogicalFile) selectedDeletion).getID());
             }
 
             if (noNovelIndels.isSelected()) {
@@ -1448,7 +1448,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
     }//GEN-LAST:event_removeFilesButtonActionPerformed
 
     private void browseFilesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFilesButtonActionPerformed
-        JFileChooser sequenceFileChooser = client.view.FileChooser.FASTQ.getAddFileDialog(true);
+        JFileChooser sequenceFileChooser = client.view.FileChooserFactory.getAddFastqFilesDialog();
         int value = sequenceFileChooser.showOpenDialog(this.getParent());
         if (value == JFileChooser.APPROVE_OPTION) {
             for (File f : sequenceFileChooser.getSelectedFiles()) {
@@ -1460,7 +1460,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
     }//GEN-LAST:event_browseFilesButtonActionPerformed
 
     private void browseAnnotationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseAnnotationButtonActionPerformed
-        JFileChooser annotationFileChooser = client.view.FileChooser.ANNOTATION.getAddFileDialog();
+        JFileChooser annotationFileChooser = client.view.FileChooserFactory.getAddAnnotationFileDialog();
         int value = annotationFileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             File file = annotationFileChooser.getSelectedFile();
@@ -1470,7 +1470,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
     }//GEN-LAST:event_browseAnnotationButtonActionPerformed
 
     private void browseJunctionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseJunctionsButtonActionPerformed
-        JFileChooser junctionFileChooser = client.view.FileChooser.JUNCTION.getAddFileDialog();
+        JFileChooser junctionFileChooser = client.view.FileChooserFactory.getAddJunctionFileDialog();
         int value = junctionFileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             File file = junctionFileChooser.getSelectedFile();
@@ -1480,7 +1480,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
     }//GEN-LAST:event_browseJunctionsButtonActionPerformed
 
     private void browseInsertionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseInsertionsButtonActionPerformed
-        JFileChooser junctionFileChooser = client.view.FileChooser.JUNCTION.getAddFileDialog();
+        JFileChooser junctionFileChooser = client.view.FileChooserFactory.getAddJunctionFileDialog();
         int value = junctionFileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             File file = junctionFileChooser.getSelectedFile();
@@ -1490,7 +1490,7 @@ public class TophatOptionForm extends javax.swing.JPanel implements FileListener
     }//GEN-LAST:event_browseInsertionsButtonActionPerformed
 
     private void browseDeletionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseDeletionsActionPerformed
-        JFileChooser junctionFileChooser = client.view.FileChooser.JUNCTION.getAddFileDialog();
+        JFileChooser junctionFileChooser = client.view.FileChooserFactory.getAddJunctionFileDialog();
         int value = junctionFileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             File file = junctionFileChooser.getSelectedFile();

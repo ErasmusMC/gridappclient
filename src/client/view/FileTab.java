@@ -193,7 +193,7 @@ public class FileTab extends JPanel {
             }
         }
 
-        JFileChooser fileChooser = FileChooser.FILE.getSaveFileDialog();
+        JFileChooser fileChooser = FileChooserFactory.getSaveToFolderDialog();
         int value = fileChooser.showSaveDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             final List<LogicalFile> downloadList = new ArrayList<>();
@@ -201,10 +201,14 @@ public class FileTab extends JPanel {
             boolean overwriteAll = false;
             for (int index : fileTable.getSelectedRows()) {
                 LogicalFile file = fileModel.getRow(index);
-                if (!overwriteAll && new File(dir, file.getName()).exists()) {
+                if (!overwriteAll && new File(dir, file.getID()).exists()) {
                     int option = JOptionPane.showOptionDialog(
-                            this, "File " + dir.getAbsolutePath() + file.getName() + " already exists.\n Do you want to overwrite it?",
-                            "Overwrite file", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                            this, "<html><body><p style='width: 225px;'>File "
+                            + dir.getAbsolutePath() + file.getID()
+                            + " already exists. Do you want to overwrite it? "
+                            + "</p></body></html>", "Overwrite file",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                            null, options, options[0]);
 
                     if (option <= 1) {
                         return;
@@ -280,7 +284,11 @@ public class FileTab extends JPanel {
             if (controller.getFile(index) instanceof BinaryFile) {
                 BinaryFile file = (BinaryFile) controller.getFile(index);
                 if (applications.contains(file)) {
-                    JOptionPane.showMessageDialog(this, "File " + file.getName() + " is used by running jobs", "Can't delete file", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "<html><body><p style='width: 225px;'>"
+                            + "File " + file.getID()
+                            + " is used by running jobs"
+                            + "</p></body></html>", "Can't delete file",
+                            JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }

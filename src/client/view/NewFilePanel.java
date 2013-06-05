@@ -146,8 +146,7 @@ public class NewFilePanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
-        JFileChooser fileChooser = FileChooser.FILE.getAddFileDialog();
-        fileChooser.setAcceptAllFileFilterUsed(true);
+        JFileChooser fileChooser = FileChooserFactory.getAddFileDialog();
         int value = fileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             file = fileChooser.getSelectedFile();
@@ -184,7 +183,7 @@ public class NewFilePanel extends JPanel {
             }
 
             if (!succes) {
-                JOptionPane.showMessageDialog(this, "Unable to delete file " + entry.getName() + "!", "Error on delete", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Unable to delete file " + entry.getID() + "!", "Error on delete", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }

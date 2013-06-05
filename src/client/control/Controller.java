@@ -12,6 +12,8 @@ import client.model.LogicalFile;
 import client.model.PersistentObject;
 import client.model.RowTableModel;
 import client.model.VirtualOrganisation;
+import client.view.BrowseOptionDialog;
+import client.view.FileChooserFactory;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -34,6 +36,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import org.apache.commons.io.FileUtils;
@@ -46,7 +49,6 @@ import org.apache.commons.lang.ArrayUtils;
 public class Controller {
 
     private static final String LFC_HOST = "lfc.grid.sara.nl";
-    private static final String SERIALIZED = ".ser";
     private static final Logger LOGGER = Logger.getLogger(Controller.class.getSimpleName());
     private static final String PWD = ".emcgridclient/";
     private static final String OBJECT_DIR = PWD + "objects/";
@@ -66,6 +68,7 @@ public class Controller {
     private VirtualOrganisation vo;
 
     public Controller() {
+        
         tasks = new ArrayList<>();
         running = new HashMap<>();
         listeners = new HashMap<>();
@@ -79,11 +82,40 @@ public class Controller {
         }
 
         try {
-            File projectDir = new File(Controller.class.getProtectionDomain().getCodeSource()
-                    .getLocation().toURI().getPath()).getParentFile();
+            File projectDir = new File(Controller.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI().getPath()).getParentFile();
             vletBootstrapper = new File(projectDir.getPath() + "/lib/vlet-1.5.0/bin/bootstrapper.jar");
         } catch (URISyntaxException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+
+        // Warning for missing vlet-1.5.0 folder in lib/
+        BrowseOptionDialog dialog = new BrowseOptionDialog(null,
+                "Missing Library Folder",
+                "<html><body><p style='width: 225px;'>"
+                + "Unable to find " + vletBootstrapper.getPath()
+                + ".</p><br /><p style='width: 225px;'>"
+                + "You won't be able to upload or download files to the grid."
+                + "</p></body></html>");
+
+        loop:
+        while (!vletBootstrapper.exists()) {
+
+            dialog.setVisible(true);
+            switch (dialog.getOption()) {
+                case BrowseOptionDialog.QUIT:
+                    System.exit(0);
+                    break loop;
+                case BrowseOptionDialog.BROWSE:
+                    JFileChooser fileChooser = FileChooserFactory.getSelectFolderDialog();
+                    fileChooser.setDialogTitle("Select the vlet-1.5.0 installation folder");
+                    if (fileChooser.showOpenDialog(null) == JOptionPane.OK_OPTION) {
+                        vletBootstrapper = new File(fileChooser.getSelectedFile() + "/bin/", "bootstrapper.jar");
+                    }
+                    break;
+                case BrowseOptionDialog.CONTINUE:
+                    break loop;
+            }
         }
     }
 
@@ -198,7 +230,7 @@ public class Controller {
                         }
                     });
 
-                    File archive = new File(tempdir, file.getName());
+                    File archive = new File(tempdir, file.getID());
                     archiver.createArchive(archive);
                     file.setProgress(50);
                     file.setDiskspace(archive.length());
@@ -282,8 +314,8 @@ public class Controller {
             }
 
             // remove meta file
-            if (ssh.test("-e", OBJECT_DIR + job.getName() + SERIALIZED)) {
-                ssh.rm(OBJECT_DIR + job.getName() + SERIALIZED);
+            if (ssh.test("-e", OBJECT_DIR + job.getID() + PersistentObject.SERIALIZED_SUFFIX)) {
+                ssh.rm(OBJECT_DIR + job.getID() + PersistentObject.SERIALIZED_SUFFIX);
             }
 
             // remove from model
@@ -303,11 +335,11 @@ public class Controller {
             }
         }
 
-        if (exists(file) && !deleteFileFromSE(file.getName())) {
+        if (exists(file) && !deleteFileFromSE(file.getID())) {
             return false;
         }
 
-        ssh.rm(OBJECT_DIR + file.getName() + SERIALIZED);
+        ssh.rm(OBJECT_DIR + file.getID() + PersistentObject.SERIALIZED_SUFFIX);
         files.remove(file);
         notifyRecordRemoved(file);
 
@@ -469,7 +501,7 @@ public class Controller {
 
     public boolean existsUI(LogicalFile file) {
         try {
-            return ssh.test("-e", OBJECT_DIR + file.getName());
+            return ssh.test("-e", OBJECT_DIR + file.getID());
 
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
@@ -485,7 +517,7 @@ public class Controller {
      * @throws IOException
      */
     public boolean exists(LogicalFile file) {
-        return exists(file.getName());
+        return exists(file.getID());
     }
 
     public boolean exists(String fileName) {
@@ -502,7 +534,7 @@ public class Controller {
     }
 
     public void uploadToUI(PersistentObject object) throws IOException {
-        File file = new File(tempdir, object.getName() + SERIALIZED);
+        File file = new File(tempdir, object.getID() + PersistentObject.SERIALIZED_SUFFIX);
         object.saveToFile(file);
         ssh.upload(file, OBJECT_DIR);
     }
@@ -514,6 +546,11 @@ public class Controller {
     }
 
     public void uploadToSE(File file, boolean overwrite) throws IOException, InterruptedException {
+
+        if (!vletBootstrapper.exists()) {
+            throw new IOException("Error: Unable to access file " + vletBootstrapper.getPath());
+        }
+
         if (overwrite || !exists(file.getName())) {
 
             List<String> command = new ArrayList<>();
@@ -544,7 +581,12 @@ public class Controller {
     }
 
     public boolean downloadFromSE(LogicalFile file, File destination) throws IOException, InterruptedException {
-        String path = getCatalogWorkingDirectory().toString() + file.getName();
+        
+        if (!vletBootstrapper.exists()) {
+            throw new IOException("Error: Unable to access file " + vletBootstrapper.getPath());
+        }
+        
+        String path = getCatalogWorkingDirectory().toString() + file.getID();
 
         List<String> command = new ArrayList<>();
         command.add("java");
@@ -568,12 +610,12 @@ public class Controller {
         if (process.exitValue() != 0) {
             LOGGER.severe(process.getInputStream().toString());
         }
-        
+
         return process.exitValue() == 0;
     }
 
     public boolean deleteFileFromSE(LogicalFile file) throws IOException {
-        return deleteFileFromSE(file.getName());
+        return deleteFileFromSE(file.getID());
     }
 
     public boolean deleteFileFromSE(String filename) throws IOException {
@@ -609,7 +651,7 @@ public class Controller {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    for (String filepath : ssh.ls(OBJECT_DIR + "*" + SERIALIZED)) {
+                    for (String filepath : ssh.ls(OBJECT_DIR + "*" + PersistentObject.SERIALIZED_SUFFIX)) {
 
                         FileInputStream fi = null;
                         ObjectInputStream in = null;

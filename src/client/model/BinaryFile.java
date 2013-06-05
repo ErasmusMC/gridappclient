@@ -24,6 +24,6 @@ public class BinaryFile extends LogicalFile {
 
     @Override
     public String toString() {
-        return getName().replace(extension, "");
+        return getID().replace(extension, "");
     }
 }

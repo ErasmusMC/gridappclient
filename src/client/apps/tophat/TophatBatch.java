@@ -105,10 +105,10 @@ public class TophatBatch extends Batch {
         command.add(host);
         command.add(home);
         command.add(resultSE);
-        command.add(job.getOutput().getName());
-        command.add(binaries.getName());
-        command.add(genome.getName());
-        command.add(job.getInput().getName());
+        command.add(job.getOutput().getID());
+        command.add(binaries.getID());
+        command.add(genome.getID());
+        command.add(job.getInput().getID());
         
         if(hasPrerequisites()) {
             command.add(getPrequisiteFileName());

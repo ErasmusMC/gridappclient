@@ -119,14 +119,14 @@ public enum Application implements FileListener<BinaryFile> {
 
     @Override
     public void fileDeleted(BinaryFile row) {
-        if (row.getName().startsWith(toString().toLowerCase())) {
+        if (row.getID().startsWith(toString().toLowerCase())) {
             binaries.remove(row);
         }
     }
 
     @Override
     public void fileAdded(BinaryFile row) {
-        if (row.getName().startsWith(toString().toLowerCase())) {
+        if (row.getID().startsWith(toString().toLowerCase())) {
             binaries.put(row, null);
         }
     }

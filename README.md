@@ -1,8 +1,8 @@
 Grid Application Client
 =============
 
-Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
-* TopHat 2
+Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this program wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
+* [TopHat 2](http://tophat.cbcb.umd.edu/manual.shtml)
 
 See [this page](https://github.com/bstoker/gridappclient/wiki/Adding-a-New-Application) on how to add an application.
 
@@ -22,12 +22,13 @@ Required Libraries
 * [jtar-2.2](http://search.maven.org/remotecontent?filepath=org/kamranzafar/jtar/2.2/jtar-2.2.jar)
 * [slf4j-1.7.2](http://www.slf4j.org/download.html) (api and jdk14 modules)
 * [commons-io-2.4](http://commons.apache.org/proper/commons-io/download_io.cgi)
-* [swiss-proxy-knife](https://github.com/grith/swiss-proxy-knife)
+* [swiss-proxy-knife](https://github.com/grith/swiss-proxy-knife/tree/develop)
 * [bcprov](http://www.bouncycastle.org/latest_releases.html) (required by swiss-proxy-knife)
 * [vlet-1.5.0](http://sourceforge.net/projects/vlet/files/vlet-1.5.0/vlet-1.5.0.zip/download)
 
 Other Requirements
 -------------------
+* Java 7 or higher
 * Login credentials to a Grid UI machine.
 * A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
 See [this page](https://github.com/bstoker/gridappclient/wiki/Accessing-the-Life-Science-Grid) on how to access the Life Science Grid.

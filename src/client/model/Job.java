@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class Job extends PersistentObject {
 
-    private static final String JDL_EXTENSION = ".jdl";
+    private static final String JDL_SUFFIX = ".jdl";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss MMM dd yyyy");
     private String id, batchID, status;
     private Map<String, String> options;
@@ -32,7 +32,7 @@ public class Job extends PersistentObject {
         super(batch.id + "_" + localID);
 
         this.input = new LogicalFile(localID);
-        this.output = new LogicalFile(getName() + "_" + batch.getApplication()
+        this.output = new LogicalFile(getID() + "_" + batch.getApplication()
                 .toString().toLowerCase() + "_out");
         this.date = new Date();
         this.status = "Uploading";
@@ -63,7 +63,7 @@ public class Job extends PersistentObject {
     }
 
     public String getJobFileName() {
-        return getName() + JDL_EXTENSION;
+        return getID() + JDL_SUFFIX;
     }
 
     public File getWrapper() {
@@ -109,7 +109,7 @@ public class Job extends PersistentObject {
     public void setStatus(String status) {
         
         if(status.equals("Done (Success)")) {
-            this.success = true;
+            success = true;
         }
         this.status = status;
     }
