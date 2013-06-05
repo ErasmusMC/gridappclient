@@ -1,8 +1,8 @@
 Grid Application Client
 =============
 
-Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this application wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
-* TopHat 2
+Program to run applications easily on the [Life Science Grid](https://github.com/bstoker/gridappclient/wiki/Life-Science-Grid). Basically this program wraps an SSH client, so users interact with an easy-to-use graphical user interface (UI) only. Currently these applications are supported:
+* [TopHat 2](http://tophat.cbcb.umd.edu/manual.shtml)
 
 See [this page](https://github.com/bstoker/gridappclient/wiki/Adding-a-New-Application) on how to add an application.
 
