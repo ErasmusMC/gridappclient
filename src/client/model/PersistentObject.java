@@ -36,7 +36,7 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
         if (name == null) {
             throw new NullPointerException("Name can't be null!");
         }
-
+        
         if (name.contains(" ")) {
             throw new IllegalArgumentException("Name can't contain spaces!");
         }
@@ -61,9 +61,13 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
      *
      */
     public void saveToFile(File file) {
-        try (FileOutputStream fos = new FileOutputStream(file); ObjectOutputStream out = new ObjectOutputStream(fos)) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fos);
             out.writeObject(this);
             out.flush();
+            out.close();
+            fos.close();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
