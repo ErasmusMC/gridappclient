@@ -28,6 +28,7 @@ Required Libraries
 
 Other Requirements
 -------------------
+* Java 7 or higher
 * Login credentials to a Grid UI machine.
 * A valid grid certificate installed on your pc and the Grid UI machine you want to login to.
 See [this page](https://github.com/bstoker/gridappclient/wiki/Accessing-the-Life-Science-Grid) on how to access the Life Science Grid.
