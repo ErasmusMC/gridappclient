@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * Extend this class to store objects on the Grid UI host.
@@ -39,7 +38,7 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
         if (name == null) {
             throw new NullPointerException("Name can't be null!");
         }
-        
+
         if (name.contains(" ")) {
             throw new IllegalArgumentException("Name can't contain spaces!");
         }
@@ -73,13 +72,9 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
      *
      */
     public void saveToFile(File file) {
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fos);
+        try (FileOutputStream fos = new FileOutputStream(file); ObjectOutputStream out = new ObjectOutputStream(fos)) {
             out.writeObject(this);
             out.flush();
-            out.close();
-            fos.close();
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -102,7 +97,7 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
         }
 
         PersistentObject o = (PersistentObject) obj;
-        return obj == this || new EqualsBuilder().append(name, o.name).isEquals();
+        return obj == this || name.equals(o.name);
     }
 
     @Override
