@@ -72,8 +72,8 @@ public class ShellWrapper {
             String stderr = IOUtils.readFully(command.getErrorStream()).toString();
             command.join(2, TimeUnit.SECONDS);
             return new String[]{
-                        String.valueOf(command.getExitStatus()),
-                        stdout, stderr};
+                String.valueOf(command.getExitStatus()),
+                stdout, stderr};
         } finally {
             session.close();
         }
@@ -105,8 +105,8 @@ public class ShellWrapper {
             output = execute("ls", filepath);
             if (Integer.parseInt(output[EXIT_VALUE]) == 0) {
                 List<String> files = new ArrayList<>();
-                for(String filename : output[STDOUT].split(LINE_SEPARATOR)) {
-                    if(!filename.isEmpty()) {
+                for (String filename : output[STDOUT].split(LINE_SEPARATOR)) {
+                    if (!filename.isEmpty()) {
                         files.add(filename);
                     }
                 }
@@ -263,7 +263,9 @@ public class ShellWrapper {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                session.close();
+                if (session != null) {
+                    session.close();
+                }
             } catch (TransportException | ConnectionException ex) {
                 LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             }
@@ -290,7 +292,9 @@ public class ShellWrapper {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
             try {
-                session.close();
+                if (session != null) {
+                    session.close();
+                }
             } catch (TransportException | ConnectionException ex) {
                 LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             }

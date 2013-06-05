@@ -63,7 +63,7 @@ public class SubmitJobs extends Thread {
                             }
                         });
 
-                        File input = new File(tempdir, job.getInput().getName());
+                        File input = new File(tempdir, job.getInput().getID());
                         archiver.createArchive(input);
                         job.setProgress(50);
                         controller.notifyJobChanged(job);

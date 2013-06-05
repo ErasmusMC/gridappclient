@@ -244,8 +244,8 @@ public class NewGenomePanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void browseIndexButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseIndexButtonActionPerformed
-        JFileChooser indexFileChooser = FileChooser.BOWTIE_INDEX.getAddFileDialog(true);
-        int value = indexFileChooser.showOpenDialog(this.getParent());
+        JFileChooser indexFileChooser = FileChooserFactory.getAddBowtieIndexFilesDialog();
+        int value = indexFileChooser.showOpenDialog(this);
 
         if (value == JFileChooser.APPROVE_OPTION) {
             for (File file : indexFileChooser.getSelectedFiles()) {
@@ -273,7 +273,7 @@ public class NewGenomePanel extends JPanel {
     }//GEN-LAST:event_removeIndexButtonActionPerformed
 
     private void browseFastaFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseFastaFileButtonActionPerformed
-        JFileChooser fastaFileChooser = FileChooser.FASTA.getAddFileDialog();
+        JFileChooser fastaFileChooser = FileChooserFactory.getAddFastaFileDialog();
         int value = fastaFileChooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
             this.sequence = fastaFileChooser.getSelectedFile();
@@ -303,7 +303,7 @@ public class NewGenomePanel extends JPanel {
             }
 
             if (!succes) {
-                JOptionPane.showMessageDialog(this, "Unable to delete file " + genome.getName() + "!", "Error on delete", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Unable to delete file " + genome.getID() + "!", "Error on delete", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }

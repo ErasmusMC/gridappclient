@@ -42,7 +42,7 @@ public class JobDetailsDialog extends javax.swing.JDialog {
         dateField.setText(job.getDateCreated());
         statusField.setText(job.getStatus());
         batchField.setText(job.getBatch());
-        inputField.setText(job.getInput().getName());
+        inputField.setText(job.getInput().getID());
         applicationField.setText(job.getApplication().toString());
 
         Object[] columns = new Object[]{"Option", "Value"};

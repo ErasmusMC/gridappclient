@@ -4,8 +4,6 @@
  */
 package client.model;
 
-import client.view.FileChooser;
-
 /**
  * This class represents a Logical File Catalog (LFC) reference to a single
  * file stored on a storage element (SE).
@@ -31,7 +29,7 @@ public class LogicalFile extends PersistentObject {
     
     @Override
     public String getType() {
-        return FileChooser.parse(getName()).getDisplayName();
+        return FileType.parse(getID()).toString();
     }
 
     /**
@@ -55,20 +53,11 @@ public class LogicalFile extends PersistentObject {
     }
 
     public void setDiskspace(long diskspace) {
-
-        long oldDiskspace = this.diskspace;
         this.diskspace = diskspace;
-        firePropertyChange("diskspace", oldDiskspace, diskspace);
     }
 
     public void setProgress(int progress) {
-
-        int oldProgress = this.progress;
         this.progress = progress;
-
-        if (oldProgress != progress) {
-            firePropertyChange("", oldProgress, progress);
-        }
     }
     
 }

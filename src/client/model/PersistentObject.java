@@ -4,8 +4,6 @@
  */
 package client.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,7 +12,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * Extend this class to store objects on the Grid UI host.
@@ -23,9 +20,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  */
 public abstract class PersistentObject implements Comparable<PersistentObject>, Serializable {
 
-    private String name;
+    public transient static final String SERIALIZED_SUFFIX = ".ser";
     protected transient static final Logger LOGGER = Logger.getLogger(PersistentObject.class.getSimpleName());
-    protected transient PropertyChangeSupport propertyChangeSupport;
+    private String id;
 
     /**
      * Constructs a PersistentObject which can be serialized and stored to a
@@ -44,30 +41,21 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
             throw new IllegalArgumentException("Name can't contain spaces!");
         }
 
-        this.name = name;
-        this.propertyChangeSupport = new PropertyChangeSupport(this);
+        this.id = name;
     }
 
-    public String getName() {
-        return name;
+    public String getID() {
+        return id;
+    }
+    
+    public String getSerializedFileName() {
+        return id + SERIALIZED_SUFFIX;
     }
 
     public String getType() {
         return getClass().getSimpleName();
     }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener(listener);
-    }
-
-    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-        propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-    }
-
+    
     /**
      * Serialize this object to file.
      *
@@ -87,12 +75,7 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
 
     @Override
     public int compareTo(PersistentObject o) {
-        return name.compareTo(o.name);
-    }
-
-    @Override
-    public String toString() {
-        return getName();
+        return id.compareTo(o.id);
     }
 
     @Override
@@ -102,13 +85,18 @@ public abstract class PersistentObject implements Comparable<PersistentObject>, 
         }
 
         PersistentObject o = (PersistentObject) obj;
-        return obj == this || new EqualsBuilder().append(name, o.name).isEquals();
+        return obj == this || id.equals(o.id);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.id);
         return hash;
+    }
+    
+    @Override
+    public String toString() {
+        return getID();
     }
 }

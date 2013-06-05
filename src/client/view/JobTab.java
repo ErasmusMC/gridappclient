@@ -229,7 +229,10 @@ public class JobTab extends javax.swing.JPanel {
         for (int row : jobTable.getSelectedRows()) {
             Job job = controller.getJob(row);
             if (!job.isFinished()) {
-                JOptionPane.showMessageDialog(this, "Unable to download results: One or more jobs have not been successfully completed!", "Unable to Download", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "<html><body><p style='width: 225px;'>"
+                        + "Unable to download results: One or more jobs have"
+                        + " not been successfully completed!" + "</p></body></html>",
+                        "Unable to Download", JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
