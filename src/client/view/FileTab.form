@@ -18,41 +18,7 @@
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="uploadButton" min="-2" pref="95" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="usernameLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="downloadButton" min="-2" pref="95" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-              <Component id="deleteButton" min="-2" pref="95" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Component id="jScrollPane2" alignment="1" pref="640" max="32767" attributes="0"/>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jScrollPane2" min="-2" pref="415" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="usernameLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="uploadButton" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="downloadButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-  </Layout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
     <Component class="javax.swing.JLabel" name="usernameLabel">
       <Properties>
@@ -60,35 +26,21 @@
         <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="4"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="deleteButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Delete"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="downloadButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Download"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downloadButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="uploadButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Add File"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uploadButtonActionPerformed"/>
-      </Events>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
@@ -103,6 +55,68 @@
               </Table>
             </Property>
           </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="South"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="uploadButton" min="-2" pref="95" max="-2" attributes="0"/>
+                  <EmptySpace pref="483" max="32767" attributes="0"/>
+                  <Component id="downloadButton" min="-2" pref="95" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="deleteButton" min="-2" pref="95" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="uploadButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="downloadButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="deleteButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="uploadButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Add File"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uploadButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="downloadButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Download"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downloadButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="deleteButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Delete"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

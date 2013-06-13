@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,18 +31,38 @@ public class LocalProxy {
     private static final String VOMS_SERVER = "voms.grid.sara.nl";
     private static final int PORT = 30018;
     private static final String VO_ISSUER = "/O=dutchgrid/O=hosts/OU=sara.nl/CN=voms.grid.sara.nl";
-    private static final File jarFile = new File(SwissProxyKnife.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-            //new File(SwissProxyKnife.class.getResource().getPath());
-            //new File("dist/lib/swiss-proxy-knife.jar");
     private static final Logger LOGGER = Logger.getLogger(LocalProxy.class.getSimpleName());
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    private File vomsesFile;
     private VirtualOrganisation vo;
+    private File vomsesFile;
+    private File jarFile;
 
     private LocalProxy(VirtualOrganisation vo) {
         this.vo = vo;
+        
+        String os = System.getProperty("os.name");
         String home = System.getProperty("user.home");
-        vomsesFile = new File(home + "/.glite/vomses/" + vo + "-voms.grid.sara.nl");
+        try {
+            jarFile = new File(SwissProxyKnife.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+
+        if (os.contains("Windows")) {
+            vomsesFile = new File(home + "/glite/vomses/" + vo + "-voms.grid.sara.nl");
+            File dir = vomsesFile.getParentFile();
+            if (!dir.exists() && !dir.mkdirs()) {
+                throw new IllegalStateException("Couldn't create dir: " + dir);
+            }
+
+            try {
+                Files.setAttribute(dir.getParentFile().toPath(), "dos:hidden", true);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            }
+        } else {
+            vomsesFile = new File(home + "/.glite/vomses/" + vo + "-voms.grid.sara.nl");
+        }
     }
 
     public static LocalProxy getProxy(VirtualOrganisation vo) {
@@ -66,17 +88,17 @@ public class LocalProxy {
             Process process = pb.start();
             process.waitFor();
 
-            if (process.exitValue() != 0) {
-                LOGGER.severe(process.getInputStream().toString());
-            }
-            
-            String output = IOUtils.readFully(process.getInputStream()).toString();
-            for (String line : output.split(LINE_SEPARATOR)) {
-                if (line.startsWith("timeleft")) {
-                    String[] time = line.substring(line.indexOf(':') + 1).trim().split(",");
-                    return Integer.parseInt(time[0].substring(0, time[0].indexOf('h')));
+            if (process.exitValue() == 0) {
+                String output = IOUtils.readFully(process.getInputStream()).toString();
+                for (String line : output.split(LINE_SEPARATOR)) {
+                    if (line.startsWith("timeleft")) {
+                        String[] time = line.substring(line.indexOf(':') + 1).trim().split(",");
+                        return Integer.parseInt(time[0].substring(0, time[0].indexOf('h')));
+                    }
                 }
             }
+            LOGGER.severe(IOUtils.readFully(process.getInputStream()).toString());
+
         } catch (InterruptedException | IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
@@ -95,31 +117,34 @@ public class LocalProxy {
 
         BufferedWriter bw = null;
         try {
-            LOGGER.log(Level.INFO, "Will locally exec `java -jar {0} -m grid-proxy-init -v /{1} -l {2} -a store-local`",
+            LOGGER.log(Level.INFO, "Will locally exec `java -jar \"{0}\" -m grid-proxy-init -v /{1} -l {2} -a store-local`",
                     new Object[]{jarFile.getAbsolutePath(), vo, lifetime});
 
-            Process process = Runtime.getRuntime().exec("java -jar " + jarFile.getAbsolutePath()
-                    + " -m grid-proxy-init -v /" + vo + " -l " + lifetime + " -a store-local");
+            Process process = Runtime.getRuntime().exec("java -jar \"" + jarFile.getAbsolutePath()
+                    + "\" -m grid-proxy-init -v /" + vo + " -l " + lifetime + " -a store-local");
 
             ByteArrayOutputStream stderr = new ByteArrayOutputStream();
             ByteArrayOutputStream stdout = new ByteArrayOutputStream();
             bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-            new StreamCopier(process.getErrorStream(), stderr).spawnDaemon("swiss-proxy-knife-stderr-copier");
-            new StreamCopier(process.getInputStream(), stdout).spawnDaemon("swiss-proxy-knife-stdout-copier");
+            new StreamCopier(process.getErrorStream(), stderr).spawnDaemon("stderr-copier");
+            new StreamCopier(process.getInputStream(), stdout).spawnDaemon("stdout-copier");
 
             final String question = "Please provide your private key passphrase:";
             String line;
             while (true) {
 
+                if (!stderr.toString().isEmpty()) {
+                    break;
+                }
+
                 line = stdout.toString();
 
-                if (!line.equals(question.substring(0, line.length()))) {
+                if (!line.equals(question)) {
                     bw.newLine();
                     break;
                 }
 
                 if (stdout.toString().equals(question)) {
-
                     bw.write(password);
                     bw.newLine();
                     bw.flush();
@@ -127,9 +152,12 @@ public class LocalProxy {
                 }
             }
 
-            int exitValue = process.waitFor();
+            if (process.waitFor() != 0) {
+                throw new IOException(stdout.toString());
+            }
+
             LOGGER.info(stdout.toString().split(LINE_SEPARATOR)[1]);
-            return exitValue == 0;
+            return true;
 
         } finally {
             if (bw != null) {

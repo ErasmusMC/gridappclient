@@ -145,11 +145,13 @@ public class JobTab extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jobTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         newJobButton = new javax.swing.JButton();
         downloadResults = new javax.swing.JButton();
         deleteJob = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(640, 450));
+        setLayout(new java.awt.BorderLayout());
 
         jobTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -163,6 +165,8 @@ public class JobTab extends javax.swing.JPanel {
             }
         ));
         jScrollPane1.setViewportView(jobTable);
+
+        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         newJobButton.setText("Run New");
         newJobButton.addActionListener(new java.awt.event.ActionListener() {
@@ -185,32 +189,31 @@ public class JobTab extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(newJobButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 325, Short.MAX_VALUE)
                 .addComponent(downloadResults, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(deleteJob, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(downloadResults)
-                        .addComponent(deleteJob))
-                    .addComponent(newJobButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(4, 4, 4))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newJobButton)
+                    .addComponent(downloadResults)
+                    .addComponent(deleteJob))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void newJobButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newJobButtonActionPerformed
@@ -317,6 +320,7 @@ public class JobTab extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteJob;
     private javax.swing.JButton downloadResults;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jobTable;
     private javax.swing.JButton newJobButton;

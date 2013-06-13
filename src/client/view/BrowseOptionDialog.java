@@ -4,6 +4,10 @@
  */
 package client.view;
 
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
 /**
  *
  * @author bram

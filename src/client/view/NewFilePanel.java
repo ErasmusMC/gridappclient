@@ -121,12 +121,12 @@ public class NewFilePanel extends JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(fileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                        .addComponent(fileTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(browseButton))
+                        .addComponent(browseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(filenameTextField))
                 .addContainerGap())
         );
@@ -189,7 +189,7 @@ public class NewFilePanel extends JPanel {
         }
 
         if (controller.getLocalProxyLifetime() < REQUIRED_PROXY_TIME) {
-            PasswordDialog dialog = new PasswordDialog(this, "Local Proxy Required!");
+            PasswordDialog dialog = new PasswordDialog(this, "Local Proxy Required");
             dialog.setVisible(true);
 
             if (dialog.getValue() != JOptionPane.OK_OPTION) {
@@ -201,8 +201,8 @@ public class NewFilePanel extends JPanel {
             try {
                 succes = controller.createLocalProxy(dialog.getPassword(), DEFAULT_PROXY_TIME);
             } catch (IOException | InterruptedException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "I/O Error occured", JOptionPane.WARNING_MESSAGE);
                 LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             } finally {
                 dialog.dispose();

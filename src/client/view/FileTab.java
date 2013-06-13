@@ -51,7 +51,7 @@ public class FileTab extends JPanel {
 
         initComponents();
 
-        fileModel = new RowTableModel<>(LogicalFile.class, "getName", "getType", "getDiskspace", "getStatus");
+        fileModel = new RowTableModel<>(LogicalFile.class, "getID", "getType", "getDiskspace", "getStatus");
         fileTable.setModel(fileModel);
         fileTable.setAutoCreateRowSorter(true);
         fileTable.getColumnModel().getColumn(2).setCellRenderer(new ByteRenderer());
@@ -83,38 +83,20 @@ public class FileTab extends JPanel {
     private void initComponents() {
 
         usernameLabel = new javax.swing.JLabel();
-        deleteButton = new javax.swing.JButton();
-        downloadButton = new javax.swing.JButton();
-        uploadButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         fileTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        uploadButton = new javax.swing.JButton();
+        downloadButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(640, 450));
+        setLayout(new java.awt.BorderLayout());
 
         usernameLabel.setText(" ");
         usernameLabel.setFocusable(false);
         usernameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        deleteButton.setText("Delete");
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
-
-        downloadButton.setText("Download");
-        downloadButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadButtonActionPerformed(evt);
-            }
-        });
-
-        uploadButton.setText("Add File");
-        uploadButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uploadButtonActionPerformed(evt);
-            }
-        });
+        add(usernameLabel, java.awt.BorderLayout.CENTER);
 
         fileTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -129,35 +111,54 @@ public class FileTab extends JPanel {
         ));
         jScrollPane2.setViewportView(fileTable);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        uploadButton.setText("Add File");
+        uploadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadButtonActionPerformed(evt);
+            }
+        });
+
+        downloadButton.setText("Download");
+        downloadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(usernameLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 483, Short.MAX_VALUE)
                 .addComponent(downloadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(usernameLabel)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(uploadButton)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(deleteButton)
-                        .addComponent(downloadButton)))
-                .addGap(4, 4, 4))
+                    .addComponent(downloadButton)
+                    .addComponent(deleteButton))
+                .addContainerGap())
         );
+
+        add(jPanel1, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadButtonActionPerformed
@@ -309,6 +310,7 @@ public class FileTab extends JPanel {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton downloadButton;
     private javax.swing.JTable fileTable;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton uploadButton;
     private javax.swing.JLabel usernameLabel;
