@@ -220,10 +220,10 @@ tophat ${tophat_options[@]} "${args[0]}" "${reads[@]}" 2>&1
 echo -e "\n"
 log "Packing results" && starttimer
 $(cd "tophat_out" && tar -cf "${args[4]}" *)
-log "Done packing ($(($(stat -c%s tophat_out/${args[4]}) / $(stoptimer))) bytes/s)\n"
+log "Done packing ($(($(stat -c%s \"tophat_out/${args[4]}\") / $(stoptimer))) bytes/s)\n"
 log "Copying results to SE $result_se" && starttimer
 lcg-cr --verbose --srm-timeout=3600 --connect-timeout=300 --sendreceive-timeout=3600 -l "${args[4]}" "tophat_out/${args[4]}" 
-log "Done copying $(ls -lah tophat_out/${args[4]} | awk '{ print $5}') ($(($(stat -c%s file:tophat_out/${args[4]}) / $(stoptimer))) bytes/s)\n"
+log "Done copying $(ls -lah tophat_out/${args[4]} | awk '{ print $5}') ($(($(stat -c%s \"file:tophat_out/{args[4]}\") / $(stoptimer))) bytes/s)\n"
 
 #===================================================================================
 #	Dispose Resources and Exit

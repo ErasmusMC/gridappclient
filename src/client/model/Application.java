@@ -10,6 +10,7 @@ import client.control.FileListener;
 import client.control.NavigationController;
 import java.awt.Container;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,7 +21,7 @@ import java.util.TreeMap;
  */
 public enum Application implements FileListener<BinaryFile> {
 
-    Tophat(new File(TophatOptionForm.class.getResource("tophatwrapper").getPath()), 168, WallClock.LONG.getTime(), 8) {
+    Tophat("/client/apps/tophat/tophatwrapper.sh", 168, WallClock.LONG.getTime(), 8) {
         @Override
         public Container createForm(BinaryFile version, NavigationController navigator, Controller controller) {
             TophatOptionForm form = new TophatOptionForm(this, version, navigator, controller);
@@ -28,12 +29,16 @@ public enum Application implements FileListener<BinaryFile> {
             return form;
         }
     };
-    private File wrapper;
+    private String wrapperName, wrapperPath;
     private int lifetime, runtime, cores;
     private Map<BinaryFile, File> binaries = new TreeMap<>();
 
-    private Application(File wrapper, int lifetime, int runtime, int threads) {
-        this.wrapper = wrapper;
+    private Application(String wrapper, int lifetime, int runtime, int threads) {
+
+        File file = new File(wrapper);
+
+        this.wrapperName = file.getName();
+        this.wrapperPath = file.getPath();
         this.lifetime = lifetime;
         this.runtime = runtime;
         this.cores = threads;
@@ -41,13 +46,12 @@ public enum Application implements FileListener<BinaryFile> {
 
     public abstract Container createForm(BinaryFile version, NavigationController navigator, Controller controller);
 
-    /**
-     * Returns the wrapper script of this application.
-     *
-     * @return the wrapper file
-     */
-    public File getWrapper() {
-        return wrapper;
+    public InputStream getWrapperAsStream() {
+        return Application.class.getResourceAsStream(wrapperPath);
+    }
+
+    public String getWrapperName() {
+        return wrapperName;
     }
 
     /**
@@ -79,11 +83,12 @@ public enum Application implements FileListener<BinaryFile> {
     public int getNumberOfThreads() {
         return cores;
     }
-    
+
     /**
      * Returns local binaries.
+     *
      * @param file archive with binaries
-     * @return 
+     * @return
      */
     public File getBinaryFile(BinaryFile file) {
         return binaries.get(file);
@@ -92,7 +97,7 @@ public enum Application implements FileListener<BinaryFile> {
     /**
      * Add a version of this application.
      *
-     * @param version 
+     * @param version
      */
     public void addVersion(BinaryFile version) {
         addBinaryFile(version, null);
