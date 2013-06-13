@@ -66,8 +66,8 @@ public class Job extends PersistentObject {
         return getID() + JDL_SUFFIX;
     }
 
-    public File getWrapper() {
-        return application.getWrapper();
+    public String getWrapperName() {
+        return application.getWrapperName();
     }
 
     public LogicalFile getInput() {

@@ -27,6 +27,10 @@ public class LogicalFile extends PersistentObject {
         super(name);
     }
     
+    public String getName() {
+        return getID();
+    }
+    
     @Override
     public String getType() {
         return FileType.parse(getID()).toString();

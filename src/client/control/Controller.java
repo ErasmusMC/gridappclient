@@ -68,7 +68,7 @@ public class Controller {
     private VirtualOrganisation vo;
 
     public Controller() {
-        
+
         tasks = new ArrayList<>();
         running = new HashMap<>();
         listeners = new HashMap<>();
@@ -178,38 +178,33 @@ public class Controller {
         return temp;
     }
 
-    public void addJob(Thread uploader, Job job) {
+    public void addJob(Thread uploadTask, Job job) {
         try {
             jobs.add(job);
+            running.put(job, uploadTask);
             uploadToUI(job);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 
-    public void addFile(final LogicalFile file, final File archive) {
+    public void addFile(Thread uploadTask, final LogicalFile file, final File archive) {
         //add to model
         files.add(file);
 
-        Thread task = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    file.setProgress(1);
-                    file.setDiskspace(archive.length());
-                    uploadToSE(archive, false);
-                    file.setProgress(100);
-                    uploadToUI(file);
-                    notifyFileAdded(file);
-                } catch (InterruptedException | IOException ex) {
-                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-                    file.setProgress(-1);
-                }
-            }
-        };
-
-        running.put(file, task);
-        executeInBackground(task);
+        try {
+            file.setProgress(1);
+            file.setDiskspace(archive.length());
+            uploadToSE(archive, false);
+            file.setProgress(100);
+            uploadToUI(file);
+            notifyFileAdded(file);
+        } catch (InterruptedException | IOException ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
+            file.setProgress(-1);
+        }
+        
+        running.put(file, uploadTask);
     }
 
     public void addFile(final LogicalFile file, final ArchiveBuilder archiver) {
@@ -299,13 +294,13 @@ public class Controller {
             // remove wrapper
             boolean wrapperLocked = false;
             for (Job other : getJobs()) {
-                if (other != job && other.getWrapper().equals(job.getWrapper())) {
+                if (other != job && other.getWrapperName().equals(job.getWrapperName())) {
                     wrapperLocked = true;
                     break;
                 }
             }
             if (!wrapperLocked) {
-                ssh.rm(FILES_DIR + job.getWrapper().getName());
+                ssh.rm(FILES_DIR + job.getWrapperName());
             }
 
             // remove jdl
@@ -581,11 +576,11 @@ public class Controller {
     }
 
     public boolean downloadFromSE(LogicalFile file, File destination) throws IOException, InterruptedException {
-        
+
         if (!vletBootstrapper.exists()) {
             throw new IOException("Error: Unable to access file " + vletBootstrapper.getPath());
         }
-        
+
         String path = getCatalogWorkingDirectory().toString() + file.getID();
 
         List<String> command = new ArrayList<>();

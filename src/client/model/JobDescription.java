@@ -61,7 +61,7 @@ public class JobDescription {
         jobFile.set(OutputSandbox, "stderr.log", "stdout.log");
         jobFile.set(RetryCount, 0);
         jobFile.set(Executable, "/bin/bash");
-        jobFile.set(InputSandbox, application.getWrapper().getName());
+        jobFile.set(InputSandbox, application.getWrapperName());
         //note that requirements have different synthax
         jobFile.set(Requirements, "(other.GlueHostArchitectureSMPSize >= " + application.getNumberOfThreads()
                 + ") && (other.GlueCEPolicyMaxWallClockTime >= " + application.getMaximumRuntime() + ")");

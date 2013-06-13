@@ -12,7 +12,9 @@ import client.model.JobDescription;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -49,6 +51,7 @@ public class SubmitJobs extends Thread {
                 @Override
                 public void run() {
                     try {
+                        LOGGER.log(Level.INFO, "Start upload {0}", job.getID());
                         job.setProgress(1);
                         controller.notifyJobChanged(job);
 
@@ -90,6 +93,7 @@ public class SubmitJobs extends Thread {
                         job.setStatus("Submitted");
                         controller.notifyJobChanged(job);
                         controller.uploadToUI(job);
+                        LOGGER.log(Level.INFO, "Finished upload {0}", job.getID());
 
                     } catch (IOException | InterruptedException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
@@ -97,18 +101,19 @@ public class SubmitJobs extends Thread {
                     }
                 }
             };
-            
-            controller.addJob(task, job);
             childs.add(task);
+            controller.addJob(task, job);
         }
 
         //upload binaries
-        controller.executeInBackground(new Runnable() {
+        controller.executeInBackground(new Thread() {
             @Override
             public void run() {
                 BinaryFile binaries = batch.getBinaries();
                 if (!controller.exists(binaries) && batch.getApplication().getVersions().contains(binaries)) {
-                    controller.addFile(binaries, batch.getApplication().getBinaryFile(binaries));
+                    LOGGER.log(Level.INFO, "Start upload {0}", batch.getApplication().getBinaryFile(binaries).getName());
+                    controller.addFile(this, binaries, batch.getApplication().getBinaryFile(binaries));
+                    LOGGER.log(Level.INFO, "Finished upload {0}", batch.getApplication().getBinaryFile(binaries).getName());
                 }
                 latch.countDown();
             }
@@ -120,12 +125,14 @@ public class SubmitJobs extends Thread {
             public void run() {
                 try {
                     if (batch.hasPrerequisites()) {
+                        LOGGER.log(Level.INFO, "Start upload {0}", batch.getPrequisiteFileName());
                         ArchiveBuilder archiver = new ArchiveBuilder();
                         archiver.putFiles(batch.getPrerequisites());
 
                         File filename = new File(tempdir, batch.getPrequisiteFileName());
                         File prerequisitesArchive = archiver.createArchive(filename);
                         controller.uploadToSE(prerequisitesArchive, true);
+                        LOGGER.log(Level.INFO, "Finished upload {0}", batch.getPrequisiteFileName());
                     }
                 } catch (InterruptedException | IOException ex) {
                     LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
@@ -137,11 +144,26 @@ public class SubmitJobs extends Thread {
         });
 
         //upload wrapper
-        controller.executeInBackground(new Runnable() {
+        controller.executeInBackground(new Thread() {
             @Override
             public void run() {
                 try {
-                    controller.uploadToUI(batch.getApplication().getWrapper());
+                    LOGGER.log(Level.INFO, "Start upload {0}", batch.getApplication().getWrapperName());
+                    //copy the wrapper from within jarfile (stream) to a temp file
+                    File wrapper = new File(controller.getTemporaryDirectory(), batch.getApplication().getWrapperName());
+                    if(!wrapper.exists()) {
+                        int bytesRead;
+                        byte[] buffer = new byte[4096];
+                        FileOutputStream out = new FileOutputStream(wrapper);
+                        InputStream in = batch.getApplication().getWrapperAsStream();
+                        while((bytesRead = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                        in.close();
+                        out.close();
+                    }
+                    controller.uploadToUI(wrapper);
+                    LOGGER.log(Level.INFO, "Finished upload {0}", batch.getApplication().getWrapperName());
                 } catch (IOException ex) {
                     LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     SubmitJobs.this.interruptChilds();
@@ -167,19 +189,8 @@ public class SubmitJobs extends Thread {
         }
         
         interrupted = true;
-        
-        for (Thread t : childs) {
-            t.interrupt();
-        }
 
         for (Job job : batch.getJobs()) {
-            if (job.isSubmitted()) {
-                try {
-                    controller.cancelJob(job);
-                } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                }
-            }
             controller.removeJob(job);
         }
     }

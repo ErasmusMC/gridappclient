@@ -90,7 +90,7 @@ public class TophatBatch extends Batch {
         
         List<String> command = new ArrayList<>();
         //wrapper script
-        command.add(application.getWrapper().getName());
+        command.add(application.getWrapperName());
         //optional arguments
         for(String option : options.keySet()) {
             command.add(option);
