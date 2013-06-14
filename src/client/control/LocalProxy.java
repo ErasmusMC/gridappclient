@@ -153,7 +153,7 @@ public class LocalProxy {
             }
 
             if (process.waitFor() != 0) {
-                throw new IOException(stdout.toString());
+                throw new IOException(stderr.toString());
             }
 
             LOGGER.info(stdout.toString().split(LINE_SEPARATOR)[1]);

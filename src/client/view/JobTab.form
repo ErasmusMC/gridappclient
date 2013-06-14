@@ -60,7 +60,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="newJobButton" min="-2" pref="95" max="-2" attributes="0"/>
-                  <EmptySpace pref="325" max="32767" attributes="0"/>
+                  <EmptySpace pref="319" max="32767" attributes="0"/>
                   <Component id="downloadResults" min="-2" pref="95" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="deleteJob" min="-2" pref="95" max="-2" attributes="0"/>

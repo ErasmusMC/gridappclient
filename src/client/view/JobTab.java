@@ -280,7 +280,9 @@ public class JobTab extends javax.swing.JPanel {
                     @Override
                     public void run() {
                         try {
+                            LOGGER.log(Level.INFO, "Start downloading {0}", source);
                             controller.downloadFromSE(source, destination);
+                            LOGGER.log(Level.INFO, "Finished downloading {0}", source);
                         } catch (IOException | InterruptedException ex) {
                             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                         }
