@@ -4,7 +4,6 @@
  */
 package client.model;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -50,7 +49,23 @@ public class Job extends PersistentObject {
         return id != null;
     }
 
+    /**
+     * Checks if the job is in a final state.
+     *
+     * @return true if finished, else false
+     */
     public boolean isFinished() {
+        if (status.equals("Done (Success)")
+                || status.equals("Cleared")
+                || status.equals("Done (Exit code != 0)")
+                || status.equals("Aborted")
+                || progress == -1) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasResults() {
         return success;
     }
 
@@ -101,14 +116,14 @@ public class Job extends PersistentObject {
     public int getProgress() {
         return progress;
     }
-    
+
     public void setProgress(int progress) {
         this.progress = progress;
     }
 
     public void setStatus(String status) {
-        
-        if(status.equals("Done (Success)")) {
+
+        if (status.equals("Done (Success)")) {
             success = true;
         }
         this.status = status;

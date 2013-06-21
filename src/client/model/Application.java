@@ -124,6 +124,11 @@ public enum Application implements FileListener<BinaryFile> {
 
     @Override
     public void fileDeleted(BinaryFile row) {
+        //prevent deletion of integrated applications
+        if(binaries.get(row) != null) {
+            return;
+        }
+        
         if (row.getID().startsWith(toString().toLowerCase())) {
             binaries.remove(row);
         }

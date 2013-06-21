@@ -46,6 +46,7 @@ public class Program {
         //</editor-fold>
 
         // applications
+        // the file is not really added? Load from jar
         Application.Tophat.addBinaryFile(new BinaryFile("tophat-2.0.8b", ".tar.gz"), new File(Program.class.getResource("apps/tophat/tophat-2.0.8b.tar.gz").getPath()));
 
         // controllers

@@ -203,7 +203,7 @@ public class Controller {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             file.setProgress(-1);
         }
-        
+
         running.put(file, uploadTask);
     }
 
@@ -703,30 +703,32 @@ public class Controller {
             @Override
             public void run() {
                 for (Job job : jobs.getObjects()) {
-                    try {
-                        String status = job.getStatus();
-                        String prefix = "Current Status:";
-                        if (job.isSubmitted()) {
+                    if (!job.isFinished()) {
+                        try {
+                            String status = job.getStatus();
+                            String prefix = "Current Status:";
+                            if (job.isSubmitted()) {
 
-                            String stats = getJobStatus(job.getGridID());
-                            for (String line : stats.split(ShellWrapper.LINE_SEPARATOR)) {
-                                line = line.trim();
+                                String stats = getJobStatus(job.getGridID());
+                                for (String line : stats.split(ShellWrapper.LINE_SEPARATOR)) {
+                                    line = line.trim();
 
-                                if (line.startsWith(prefix)) {
-                                    status = line.substring(prefix.length()).trim();
+                                    if (line.startsWith(prefix)) {
+                                        status = line.substring(prefix.length()).trim();
+                                    }
                                 }
+                            } else {
+                                status = "Uploading";
                             }
-                        } else {
-                            status = "Uploading";
-                        }
 
-                        if (!job.getStatus().equals(status)) {
-                            job.setStatus(status);
-                            notifyJobChanged(job);
-                            uploadToUI(job);
+                            if (!job.getStatus().equals(status)) {
+                                job.setStatus(status);
+                                notifyJobChanged(job);
+                                uploadToUI(job);
+                            }
+                        } catch (IOException ex) {
+                            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                         }
-                    } catch (IOException ex) {
-                        LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     }
                 }
             }

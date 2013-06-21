@@ -231,7 +231,7 @@ public class JobTab extends javax.swing.JPanel {
 
         for (int row : jobTable.getSelectedRows()) {
             Job job = controller.getJob(row);
-            if (!job.isFinished()) {
+            if (!job.hasResults()) {
                 JOptionPane.showMessageDialog(this, "<html><body><p style='width: 225px;'>"
                         + "Unable to download results: One or more jobs have"
                         + " not been successfully completed!" + "</p></body></html>",

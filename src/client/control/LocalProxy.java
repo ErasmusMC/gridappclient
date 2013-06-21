@@ -117,11 +117,11 @@ public class LocalProxy {
 
         BufferedWriter bw = null;
         try {
-            LOGGER.log(Level.INFO, "Will locally exec `java -jar \"{0}\" -m grid-proxy-init -v /{1} -l {2} -a store-local`",
-                    new Object[]{jarFile.getAbsolutePath(), vo, lifetime});
-
-            Process process = Runtime.getRuntime().exec("java -jar \"" + jarFile.getAbsolutePath()
-                    + "\" -m grid-proxy-init -v /" + vo + " -l " + lifetime + " -a store-local");
+            String command = "java -jar " + jarFile.getAbsolutePath()
+                    + " -m grid-proxy-init -v /" + vo + " -l " + lifetime + " -a store-local";
+                    
+            LOGGER.log(Level.INFO, "Will locally exec `{0}`", new Object[]{command});
+            Process process = Runtime.getRuntime().exec(command);
 
             ByteArrayOutputStream stderr = new ByteArrayOutputStream();
             ByteArrayOutputStream stdout = new ByteArrayOutputStream();
@@ -129,7 +129,7 @@ public class LocalProxy {
             new StreamCopier(process.getErrorStream(), stderr).spawnDaemon("stderr-copier");
             new StreamCopier(process.getInputStream(), stdout).spawnDaemon("stdout-copier");
 
-            final String question = "Please provide your private key passphrase:";
+            final String question = "Please provide your private key passphrase: ";
             String line;
             while (true) {
 
@@ -139,7 +139,7 @@ public class LocalProxy {
 
                 line = stdout.toString();
 
-                if (!line.equals(question)) {
+                if (!question.startsWith(line)) {
                     bw.newLine();
                     break;
                 }

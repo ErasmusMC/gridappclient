@@ -24,14 +24,6 @@ public class Client extends JFrame {
     private static final String TITLE = "Grid Application Client";
     private static final Dimension SIZE = new Dimension(640, 480);
 
-    public enum State {
-
-        LOGGED_OUT,
-        LOGGED_IN,
-        VIEW_DATA,
-        JOB_OPTIONS
-    }
-
     public Client(final Controller controller) {
         setTitle(TITLE);
         pack();             //workaround for the tooltip dual-monitor display bug
