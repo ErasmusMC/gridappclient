@@ -37,4 +37,4 @@ Notes
 ------------------
 * The view has been created with the SWING GUI Builder integrated in the Netbeans IDE.
 * The UI machine has been locked to ui.grid.sara.nl, because some meta-data is stored and not available if you switch to another UI machine.
-* When building the application the vlet-1.5.0 folder is not automatically added to the dist/lib/ folder, because it's a directory. Adding [this](https://github.com/bstoker/gridappclient/wiki/Adding-VLET-folder-to-lib-on-build) code to your build.xml file copies the folder on build.
+* When building the application the vlet-1.5.0 folder is not automatically added to the dist/lib/ folder, because it's a directory. Adding [this](https://github.com/ErasmusMC/gridappclient/wiki/Adding-vlet-1.5.0-folder-to-lib-on-build) code to your build.xml file copies the folder on build.
